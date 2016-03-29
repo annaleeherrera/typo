@@ -68,7 +68,7 @@ When /^I create a new category named $category/ do |category|
 end
 
 Then /^I should see that a category named category$ exists/ do |category|
-  response.body.should =~ Regexp.new(name)
+  response.body.should =~ Regexp.new(category)
 end
 
 When /^I edit a new category named category$/ do |category|
@@ -77,8 +77,8 @@ When /^I edit a new category named category$/ do |category|
   clicks_button 'Create'
 end
 
-Then "I should see that a category named $category exists" do |category|
-  response.body.should =~ Regexp.new(name)
+Then /^I should see that a category named category$ exists/ do |category|
+  response.body.should =~ Regexp.new(category)
 end
 
 When /^(.*) within (.*[^:]):$/ do |step, parent, table_or_string|

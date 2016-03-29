@@ -1,15 +1,27 @@
 class Admin::CategoriesController < Admin::BaseController
   cache_sweeper :blog_sweeper
 
-  def index; redirect_to :action => 'new' ; end
+  def index
+    redirect_to new_category_path
+  end
+
   def edit; new_or_edit;  end
 
-  def new 
+  def new
     respond_to do |format|
       format.html { new_or_edit }
-      format.js { 
+      format.js {
         @category = Category.new
       }
+    end
+  end
+
+  def create
+    @category = Category.new(category_params)
+    if @category.save
+      redirect_to category_path(params[:id])
+    else
+      render 'new'
     end
   end
 
@@ -30,7 +42,7 @@ class Admin::CategoriesController < Admin::BaseController
     if request.post?
       respond_to do |format|
         format.html { save_category }
-        format.js do 
+        format.js do
           @category.save
           @article = Article.new
           @article.categories << @category
@@ -48,7 +60,11 @@ class Admin::CategoriesController < Admin::BaseController
     else
       flash[:error] = _('Category could not be saved.')
     end
-    redirect_to :action => 'new'
+    redirect_to :action => 'new_category'
+  end
+
+  def category_params
+    params.require(:category).permit([:name])
   end
 
 end
