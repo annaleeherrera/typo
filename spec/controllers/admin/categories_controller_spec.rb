@@ -11,6 +11,16 @@ describe Admin::CategoriesController do
     request.session = { :user => henri.id }
   end
 
+  it "renders the 'new' template"
+    get :new
+    expect(response).to render_template :new
+  end
+
+  it "successfully loads 'new' page"
+    get :new
+    expect(response.status).to eq 200
+  end
+
   it "test_index" do
     get :index
     assert_response :redirect, :action => 'index'
@@ -61,14 +71,5 @@ describe Admin::CategoriesController do
     assert_response :redirect, :action => 'index'
 
     assert_raise(ActiveRecord::RecordNotFound) { Category.find(test_id) }
-  end
-
-  describe "GET 'index'" do
-    it "returns the index page with success" do
-      get :index
-      expect(response).to be_success
-      expect(response.status).to eq 200
-      expect(response).to have_http_status 200
-    end
   end
 end
