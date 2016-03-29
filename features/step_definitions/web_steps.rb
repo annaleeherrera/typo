@@ -61,6 +61,26 @@ When /^(.*) within (.*[^:])$/ do |step, parent|
 end
 
 # Multi-line step scoper
+When /^I create a new category named $category/ do |category|
+  visits new_category_path
+  fills_in 'Category', :with => Category
+  clicks_button 'Create'
+end
+
+Then /^I should see that a category named category$ exists/ do |category|
+  response.body.should =~ Regexp.new(name)
+end
+
+When /^I edit a new category named category$/ do |category|
+  visits edit_category_path
+  fills_in 'Category', :with => Category
+  clicks_button 'Create'
+end
+
+Then "I should see that a category named $category exists" do |category|
+  response.body.should =~ Regexp.new(name)
+end
+
 When /^(.*) within (.*[^:]):$/ do |step, parent, table_or_string|
   with_scope(parent) { When "#{step}:", table_or_string }
 end
@@ -250,7 +270,7 @@ Then /^the "([^"]*)" checkbox(?: within (.*))? should not be checked$/ do |label
     end
   end
 end
- 
+
 Then /^(?:|I )should be on (.+)$/ do |page_name|
   current_path = URI.parse(current_url).path
   if current_path.respond_to? :should
@@ -264,8 +284,8 @@ Then /^(?:|I )should have the following query string:$/ do |expected_pairs|
   query = URI.parse(current_url).query
   actual_params = query ? CGI.parse(query) : {}
   expected_params = {}
-  expected_pairs.rows_hash.each_pair{|k,v| expected_params[k] = v.split(',')} 
-  
+  expected_pairs.rows_hash.each_pair{|k,v| expected_params[k] = v.split(',')}
+
   if actual_params.respond_to? :should
     actual_params.should == expected_params
   else
