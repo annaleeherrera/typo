@@ -1,10 +1,7 @@
 class Admin::CategoriesController < Admin::BaseController
   cache_sweeper :blog_sweeper
 
-  def index
-    redirect_to new_category_path
-  end
-
+  def index; redirect_to :action => 'new' ; end
   def edit; new_or_edit;  end
 
   def new
@@ -13,15 +10,6 @@ class Admin::CategoriesController < Admin::BaseController
       format.js {
         @category = Category.new
       }
-    end
-  end
-
-  def create
-    @category = Category.new(category_params)
-    if @category.save
-      redirect_to category_path(params[:id])
-    else
-      render 'new'
     end
   end
 
@@ -37,7 +25,11 @@ class Admin::CategoriesController < Admin::BaseController
 
   def new_or_edit
     @categories = Category.find(:all)
-    @category = Category.find(params[:id])
+    if params[:id] == nil
+      @category = Category.new
+    else
+      @category = Category.find_by_id(params[:id])
+    end
     @category.attributes = params[:category]
     if request.post?
       respond_to do |format|
@@ -60,11 +52,6 @@ class Admin::CategoriesController < Admin::BaseController
     else
       flash[:error] = _('Category could not be saved.')
     end
-    redirect_to :action => 'new_category'
+    redirect_to :action => 'new'
   end
-
-  def category_params
-    params.require(:category).permit([:name])
-  end
-
 end
