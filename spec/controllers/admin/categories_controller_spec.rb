@@ -11,12 +11,12 @@ describe Admin::CategoriesController do
     request.session = { :user => henri.id }
   end
 
-  it "renders the 'new' template"
+  it "renders the 'new' template" do
     get :new
     expect(response).to render_template :new
   end
 
-  it "successfully loads 'new' page"
+  it "successfully loads 'new' page" do
     get :new
     expect(response.status).to eq 200
   end
