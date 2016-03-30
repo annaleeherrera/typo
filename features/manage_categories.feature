@@ -19,7 +19,7 @@ Feature: Create category
     When I fill in "Name" with "dogs"
     Then I should be able to click "Categories"
     And I should have 1 category
-    Then I should see "dogs"
+    And I should see "dogs"
 
   Scenario: Create a Category
     When I follow "Categories"
@@ -29,14 +29,14 @@ Feature: Create category
     And I fill in "Description" with "fun"
     And I press "Save"
     Then I should see "Category was successfully saved."
-    Then I should see "dogs"
+    And I should see "dogs"
 
   Scenario:  Edit a Category
     When I go to the edit page for "dogs"
     And I fill in "Description" with "playful"
     And I press "Save"
     Then I should see "Category was successfully saved."
-    Then I should see "dogs"
+    And I should see "dogs"
 
   Scenario:  Cancel editing
     When I got to the edit page for "dogs"
